@@ -1,0 +1,49 @@
+import psutil  # Untuk mendapatkan informasi sistem
+import sys  # Untuk menghitung ukuran objek dalam memori
+
+# Fungsi untuk menampilkan informasi memori sistem
+def tampilkan_info_memori(pesan):
+    """Menampilkan informasi penggunaan memori sistem"""
+    mem = psutil.virtual_memory()
+    print(f"\n{pesan}")
+    print("-" * 50)
+    print(f"Total Memori     : {mem.total} bytes ({round(mem.total / 2**30, 2)} GB)")
+    print(f"Memori Digunakan : {mem.used} bytes ({round(mem.used / 2**30, 2)} GB)")
+    print(f"Memori Tersedia  : {mem.available} bytes ({round(mem.available / 2**30, 2)} GB)")
+    print(f"Persentase Penggunaan : {mem.percent}%")
+    print("-" * 50)
+
+# Mengecek memori sebelum alokasi
+tampilkan_info_memori("📌 Status Memori Sebelum Alokasi")
+
+# Membuat dictionary besar dengan 1.048.576 pasangan key-value
+data_dict = {x: x for x in range(1024 * 1024)}
+
+# Fungsi untuk mengukur ukuran variabel dalam bytes
+def ukur_variabel(nama, variabel):
+    """Menampilkan ukuran variabel dalam bytes"""
+    ukuran = sys.getsizeof(variabel)
+    print(f"Ukuran {nama:<8}: {ukuran} bytes")
+
+# Menampilkan ukuran beberapa variabel
+string_data = ["apple", "banana", "cherry"]
+integer_data = [42, 999, 123456]
+float_data = [3.14, 2.718, 1.618]
+
+print("\n📌 Ukuran Beberapa Variabel")
+print("-" * 50)
+
+for i, val in enumerate(string_data, 1):
+    ukur_variabel(f"String {i}", val)
+for i, val in enumerate(integer_data, 1):
+    ukur_variabel(f"Integer {i}", val)
+for i, val in enumerate(float_data, 1):
+    ukur_variabel(f"Float {i}", val)
+
+# Menghitung ukuran dictionary dengan semua elemennya
+total_dict_size = sys.getsizeof(data_dict) + sum(sys.getsizeof(k) + sys.getsizeof(v) for k, v in data_dict.items())
+print(f"\nUkuran data_dict : {total_dict_size} bytes ({round(total_dict_size / 2**20, 2)} MB)")
+print("-" * 50)
+
+# Mengecek memori setelah alokasi
+tampilkan_info_memori("📌 Status Memori Setelah Alokasi")
